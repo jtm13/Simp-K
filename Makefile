@@ -1,4 +1,4 @@
-CC = gcc
+CC = g++
 CFLAGS = -g -Wall
 VPATH = src:bin
 OBJ = bin/obj/
@@ -6,16 +6,16 @@ OBJ = bin/obj/
 #-Wall -Wextra
 #-Werror -std=gnu99
 
-all: keylog
+all: main
 
-keylog: $(OBJ)keylog.o
-	$(CC) $(CFLAGS) -o bin/keylog $^ 
+main: $(OBJ)keylog.o $(OBJ)main.o
+	$(CC) $(CFLAGS) -o bin/main $^ 
 
 
 %: %.c bin.txt
 	$(CC) $(CFLAGS) -o bin/$@ $<
 
-$(OBJ)%.o: %.c $(OBJ)obj.txt
+$(OBJ)%.o: %.cpp $(OBJ)obj.txt
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJ)obj.txt:
@@ -31,6 +31,6 @@ clean:
 	rm -rf bin/obj/*
 	rm -rf *.dSYM
 	rm -rf *.class
-	rm bin/keylog*
-	rm keylog*
+	rm bin/main*
+	rm main*
 	rm *.o
