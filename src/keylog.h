@@ -1,68 +1,33 @@
-#include <vector>
 #ifndef KEYLOG_H
 #define KEYLOG_H
 
-// Definitely Windows specific
-enum vcodes {VK_BACK = 0x08, VK_TAB, VK_CLEAR = 0x0C, VK_RETURN, VK_SHIFT = 0x10, VK_CONTROL,
-    VK_MENU, VK_PAUSE, VK_CAPITAL, VK_ESCAPE = 0x1B, VK_SPACE = 0x20, VK_PRIOR, VK_NEXT, VK_END,
-    VK_HOME, VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN, VK_SELECT, VK_PRINT, VK_EXECUTE, VK_SNAPSHOT,
-    VK_INSERT, VK_DELETE, VK_HELP, VK_1, VK_2, VK_3, VK_4, VK_5, VK_6, VK_7, VK_8, VK_9,
-    VK_A = 0x41, VK_B, VK_C, VK_D, VK_E, VK_F, VK_G, VK_H, VK_I, VK_J, VK_K, VK_L, VK_M, VK_N,
-    VK_O, VK_P, VK_Q, VK_R, VK_S, VK_T, VK_U, VK_V, VK_W, VK_X, VK_Y, VK_Z, VK_LWIN, VK_RWIN,
-    VK_APPS, VK_SLEEP = 0x5F, VK_NUMPAD0, VK_NUMPAD1, VK_NUMPAD2, VK_NUMPAD3, VK_NUMPAD4,
-    VK_NUMPAD5, VK_NUMPAD6, VK_NUMPAD7, VK_NUMPAD8, VK_NUMPAD9, VK_MULTIPLY, VK_ADD,
-    VK_SEPARATOR, VK_SUBTRACT, VK_DECIMAL, VK_DIVIDE, VK_OEM_1 = 0xBB /*'.'*/,
-    VK_OEM_PLUS /*'+'*/, VK_OEM_COMMA /*','*/, VK_OEM_MINUS /*'-'*/, VK_OEM_PERIOD /*'.'*/,
-    VK_OEM_2 /*'/?'*/, VK_OEM_3 /*'`~'*/, VK_OEM_4 = 0xDB /*'[{'*/, VK_OEM_5 /*'\|'*/,
-    VK_OEM_6 /*']}'*/, VK_OEM_7 /*''"'*/, VK_OEM_8 /*'IDK'*/, VK_OEM_CLEAR = 0xFE, END};
+#include <vector>
+#include <string>
 
-vcodes& operator++(vcodes& e) {
-    switch(e) {
-        case VK_TAB:
-        e = vcodes(0x0C);
-        break;
-        case VK_RETURN:
-        e = vcodes(0x10);
-        break;
-        case VK_CAPITAL:
-        e = vcodes(0x1B);
-        break;
-        case VK_ESCAPE:
-        e = vcodes(0x20);
-        break;
-        case VK_9:
-        e = vcodes(0x41);
-        break;
-        case VK_APPS:
-        e = vcodes(0x5F);
-        break;
-        case VK_DIVIDE:
-        e = vcodes(0xBB);
-        break;
-        case VK_OEM_3:
-        e = vcodes(0xDB);
-        break;
-        case VK_OEM_8:
-        e = vcodes(0xFE);
-        break;
-        case END:
-        throw out_of_range("vcodes operator++");
-        default:
-        vcodes(static_cast<underlying_type<vcodes>::type>(e) + 1);
-    }
-    return e;
-} // operator++ (in header for reassurance it works)
+// Definitely Windows specific
+enum vcodes {VC_BACK = 0x08, VC_TAB, VC_CLEAR = 0x0C, VC_RETURN, VC_SHIFT = 0x10, VC_CONTROL,
+    VC_MENU, VC_PAUSE, VC_CAPITAL, VC_ESCAPE = 0x1B, VC_SPACE = 0x20, VC_PRIOR, VC_NEXT, VC_END,
+    VC_HOME, VC_LEFT, VC_UP, VC_RIGHT, VC_DOWN, VC_SELECT, VC_PRINT, VC_EXECUTE, VC_SNAPSHOT,
+    VC_INSERT, VC_DELETE, VC_HELP, VC_0, VC_1, VC_2, VC_3, VC_4, VC_5, VC_6, VC_7, VC_8, VC_9,
+    VC_A = 0x41, VC_B, VC_C, VC_D, VC_E, VC_F, VC_G, VC_H, VC_I, VC_J, VC_K, VC_L, VC_M, VC_N,
+    VC_O, VC_P, VC_Q, VC_R, VC_S, VC_T, VC_U, VC_V, VC_W, VC_X, VC_Y, VC_Z, VC_LWIN, VC_RWIN,
+    VC_APPS, VC_SLEEP = 0x5F, VC_NUMPAD0, VC_NUMPAD1, VC_NUMPAD2, VC_NUMPAD3, VC_NUMPAD4,
+    VC_NUMPAD5, VC_NUMPAD6, VC_NUMPAD7, VC_NUMPAD8, VC_NUMPAD9, VC_MULTIPLY, VC_ADD,
+    VC_SEPARATOR, VC_SUBTRACT, VC_DECIMAL, VC_DIVIDE, VC_OEM_1 = 0xBA /*';:'*/,
+    VC_OEM_PLUS /*'+'*/, VC_OEM_COMMA /*','*/, VC_OEM_MINUS /*'-'*/, VC_OEM_PERIOD /*'.'*/,
+    VC_OEM_2 /*'/?'*/, VC_OEM_3 /*'`~'*/, VC_OEM_4 = 0xDB /*'[{'*/, VC_OEM_5 /*'\|'*/,
+    VC_OEM_6 /*']}'*/, VC_OEM_7 /*''"'*/, VC_OEM_8 /*'IDK'*/, VC_OEM_CLEAR = 0xFE, END};
+
 
 
 // Maybe Windows specific
 
-struct key {
-    int vcode;
-    bool prev;
-};
 
-std::vector<key> getPressedKeyboardState();
+std::vector<vcodes> getPressedKeyboardState();
+std::string getAscii(std::vector<vcodes>);
 
 // Generic
-void writeToFile(char);
+
+void writeToFile(std::string, std::string);
+
 #endif
