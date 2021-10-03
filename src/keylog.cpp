@@ -340,34 +340,32 @@ vector<vcodes> getPressedKeyboardState(string path) {
         x++;
     }
     #elif __unix__
-    ifstream keyboard{path};
+    static ifstream keyboard{path};
     if (!keyboard) {
         cerr << "path is incorrect.\n";
-        return pressed;
+        exit(1);
     }
     keyboard.setf(ios::hex);
-    int x = 0;
-    int last = 0;
-    while (!keyboard.eof()) {
-        last = x;
-        cin >> x;
-        vcodes v = convert(x);
-        if (v == vcodes::VC_CAPITAL) {
-            if (!ar[0]) {
-                capsLoc = !capsLoc;
-                ar[0] = true;
-            } else if (last == 0xF0) {
-                ar[0] = false;
-            }
-            if (capsLoc) {
-                pressed.push_back(v);
-            }
-        } else {
-            bool l = ar[x];
-            ar[x] = (last == 0xF0) ? false : true;
-            if (!l && ar[x]) {
-                pressed.push_back(v);
-            }
+    static int x = 0;
+    static int last = 0;
+    last = x;
+    cin >> x;
+    vcodes v = convert(x);
+    if (v == vcodes::VC_CAPITAL) {
+        if (!ar[0]) {
+            capsLoc = !capsLoc;
+            ar[0] = true;
+        } else if (last == 0xF0) {
+            ar[0] = false;
+        }
+        if (capsLoc) {
+            pressed.push_back(v);
+        }
+    } else {
+        bool l = ar[x];
+        ar[x] = (last == 0xF0) ? false : true;
+        if (!l && ar[x]) {
+            pressed.push_back(v);
         }
     }
     #endif
