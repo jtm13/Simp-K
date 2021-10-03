@@ -4,11 +4,13 @@
 #if defined(_WIN32) || defined(__CYGWIN__) || defined(__CYGWIN32)
 #include <windows.h>
 #include <windowsx.h>
+#define MAX_VALUE 94
 #elif __unix__ 
 #include <sys/types.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
+#define MAX_VALUE 127
 #endif // macros defined by cpp (C prprocessor)
 
 using namespace std;
@@ -309,9 +311,9 @@ vcodes convert(int x) {
     return v;
 }
 
-vector<vcodes> getPressedKeyboardState(string path = "/dev/input/event2") {
+vector<vcodes> getPressedKeyboardState(string path) {
     vector<vcodes> pressed;
-    static bool ar[94];
+    static bool ar[MAX_VALUE];
     static bool capsLoc = false;
     #if defined(_WIN32) || defined(__CYGWIN__) || defined(__CYGWIN32)
     int x = 0;
@@ -344,22 +346,29 @@ vector<vcodes> getPressedKeyboardState(string path = "/dev/input/event2") {
         return pressed;
     }
     keyboard.setf(ios::hex);
-    int x;
+    int x = 0;
+    int last = 0;
     while (!keyboard.eof()) {
+        last = x;
         cin >> x;
         vcodes v = convert(x);
         if (v == vcodes::VC_CAPITAL) {
             if (!ar[0]) {
                 capsLoc = !capsLoc;
                 ar[0] = true;
-            } else if (!p) {
+            } else if (last == 0xF0) {
                 ar[0] = false;
             }
             if (capsLoc) {
                 pressed.push_back(v);
             }
-        } // if
-        pressed.push_back(v);
+        } else {
+            bool l = ar[x];
+            ar[x] = (last == 0xF0) ? false : true;
+            if (!l && ar[x]) {
+                pressed.push_back(v);
+            }
+        }
     }
     #endif
     return pressed;
