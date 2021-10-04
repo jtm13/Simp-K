@@ -5,11 +5,12 @@
 #include <windows.h>
 #include <windowsx.h>
 #define MAX_VALUE 94
-#elif __unix__ 
-#include <sys/types.h>
+#elif __unix__
+#include <poll.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
+#include <cstring>
 #define MAX_VALUE 127
 #endif // macros defined by cpp (C prprocessor)
 
@@ -340,34 +341,48 @@ vector<vcodes> getPressedKeyboardState(string path) {
         x++;
     }
     #elif __unix__
-    static ifstream keyboard{path};
-    if (!keyboard) {
-        cerr << "path is incorrect.\n";
+    static int fd  = open(&*path.begin(), O_RDONLY | O_NONBLOCK);
+    if (fd < 0) {
+        cerr << "path is incorrect.\n" << endl;
         exit(1);
     }
-    keyboard.setf(ios::hex);
     static int x = 0;
     static int last = 0;
-    last = x;
-    cin >> x;
-    vcodes v = convert(x);
-    if (v == vcodes::VC_CAPITAL) {
-        if (!ar[0]) {
-            capsLoc = !capsLoc;
-            ar[0] = true;
-        } else if (last == 0xF0) {
-            ar[0] = false;
-        }
-        if (capsLoc) {
-            pressed.push_back(v);
-        }
-    } else {
-        bool l = ar[x];
-        ar[x] = (last == 0xF0) ? false : true;
-        if (!l && ar[x]) {
-            pressed.push_back(v);
-        }
-    }
+	struct pollfd f[1] = {fd, POLLIN, 0};
+	int t = 50000;
+	unsigned char s[4096];
+	memset(s, '\0', 4096);
+	if (poll(f, 1, t) < 0) {
+		cout << "ME" << endl;
+		return pressed;
+	} // if
+    t = read(fd, s, sizeof(char) * 4096);
+	for (int i = 0; i < t; i++) {
+		last = x;
+		char ch[3] = {'\0', '\0', '\0'};
+		sprintf(ch, "%02X", s[i]);
+		printf("%02X", s[i]);
+		x = stoi(ch, nullptr, 16);
+		vcodes v = convert(x);
+		if (v == vcodes::VC_CAPITAL) {
+			if (!ar[0]) {
+				capsLoc = !capsLoc;
+				ar[0] = true;
+			} else if (last == 0xF0) {
+				ar[0] = false;
+			}
+			if (capsLoc) {
+				pressed.push_back(v);
+			}
+		} else {
+			bool l = ar[x];
+			ar[x] = (last == 0xF0) ? false : true;
+			if (!l && ar[x]) {
+				pressed.push_back(v);
+			}
+		}
+	}
+	cout << endl;
     #endif
     return pressed;
 } // getAsyncKeyboardState
@@ -529,6 +544,7 @@ void writeToFile(string file, string s) {
         cerr << "Cannot find " << file << endl;
         return;
     }
+	cout << s << endl;
     outFile << s;
     outFile.flush();
 } // writeToFile
