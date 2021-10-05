@@ -352,43 +352,38 @@ vector<vcodes> getPressedKeyboardState(string path) {
     }
     int x = 0;
 	struct pollfd f[1] = {fd, POLLIN, 0};
-	int t = 50000;
+	int t = 1000;
 	unsigned char s[4096];
-	memset(s, '\0', 4096);
-	if (poll(f, 1, t) < 0) {
-		cout << "ME" << endl;
-		return pressed;
-	} // if
-    t = read(fd, s, sizeof(char) * 4096);
-	char ch[3] = {'\0', '\0', '\0'};
-	sprintf(ch, "%02X", s[20]);
-	x = stoi(ch, nullptr, 16);
-    if (x == 0xE0) {
-        sprintf(ch, "%02X", s[21]);
-        x = stoi(ch, nullptr, 16) + 0xE000;
-    } else if (x == 0xE1) {
-        x = (int)set1::PAUSE;
-    }
-    vcodes v;
-    try {
-	    v = convert<set1, vcodes>(set1(x));
-    } catch (invalid_argument const & ex) {
-        return pressed;
-    }
-	if (v == vcodes::CAPITAL) {
-		if (!ar[0]) {
-			capsLoc = !capsLoc;
-			ar[0] = true;
-		} else if (last) {
-			ar[0] = false;
-		}
-		if (capsLoc) {
-			pressed.push_back(v);
-		}
-	} else {
-		pressed.push_back(v);
-	}
-	cout << endl;
+    while (1) {
+	    memset(s, '\0', 4096);
+	    if (poll(f, 1, t) < 0) {
+	    	return pressed;
+	    } // if keys have not recieved input in t milliseconds
+        t = read(fd, s, sizeof(char) * 4096);
+	    char ch[3] = {'\0', '\0', '\0'};
+	    sprintf(ch, "%02X", s[20]);
+	    x = stoi(ch, nullptr, 16);
+        if (x == 0xE0) {
+            sprintf(ch, "%02X", s[21]);
+            x = stoi(ch, nullptr, 16) + 0xE000;
+        } else if (x == 0xE1) {
+            x = (int)set1::PAUSE;
+        }
+        vcodes v;
+        try {
+	        v = convert<set1, vcodes>(set1(x));
+        } catch (invalid_argument const & ex) {
+            return pressed;
+        }
+	    if (v == vcodes::CAPITAL) {
+	    	capsLoc = !capsLoc;
+	    	if (capsLoc) {
+	    		pressed.push_back(v);
+	    	}
+	    } else {
+	    	pressed.push_back(v);
+	    }
+    } // while
     #endif
     return pressed;
 } // getAsyncKeyboardState
