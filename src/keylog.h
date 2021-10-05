@@ -16,7 +16,7 @@ enum class vcodes {BACK = 0x08, TAB, CLEAR = 0x0C, RETURN, SHIFT = 0x10, CONTROL
     SEPARATOR, SUBTRACT, DECIMAL, DIVIDE, OEM_1 = 0xBA /*';:'*/,
     OEM_PLUS /*'+'*/, OEM_COMMA /*','*/, OEM_MINUS /*'-'*/, OEM_PERIOD /*'.'*/,
     OEM_2 /*'/?'*/, OEM_3 /*'`~'*/, OEM_4 = 0xDB /*'[{'*/, OEM_5 /*'\|'*/,
-    OEM_6 /*']}'*/, OEM_7 /*''"'*/, OEM_8 /*'IDK'*/, OEM_CLEAR = 0xFE, END};
+    OEM_6 /*']}'*/, OEM_7 /*''"'*/, OEM_8 /*'IDK'*/, OEM_CLEAR = 0xFE, REAL_END};
 
  // Definitely Linux specific
  enum class set3 {BACK = 0x66, TAB = 0x0D, RETURN = 0x5A, LSHIFT = 0x12, RSHIFT = 0x59,

@@ -45,7 +45,7 @@ vcodes& operator++(vcodes& e) {
         case vcodes::OEM_8:
         e = vcodes(0xFE);
         break;
-        case vcodes::END:
+        case vcodes::REAL_END:
         throw std::out_of_range("vcodes operator++");
         default:
         e = vcodes(static_cast<std::underlying_type<vcodes>::type>(e) + 1);
@@ -53,7 +53,7 @@ vcodes& operator++(vcodes& e) {
     return e;
 } // operator++
 
-template<enum class T1, enum class T2>
+template<enum T1, enum T2>
 T2 convert(T1 x) {
     T2 v;
     switch (x) {
@@ -319,7 +319,7 @@ vector<vcodes> getPressedKeyboardState(string path) {
     static bool capsLoc = false;
     #if defined(_WIN32) || defined(__CYGWIN__) || defined(__CYGWIN32)
     int x = 0;
-    for (vcodes v = vcodes::BACK; v != vcodes::END; ++v) {
+    for (vcodes v = vcodes::BACK; v != vcodes::REAL_END; ++v) {
         bool p = (GetAsyncKeyState((int)v) & 0x8000);
         if (v == vcodes::CAPITAL) {
             if (p && !ar[x]) {
