@@ -350,7 +350,6 @@ vector<vcodes> getPressedKeyboardState(string path) {
         cerr << "path is incorrect.\n" << endl;
         exit(1);
     }
-    bool last;
     int x = 0;
 	struct pollfd f[1] = {fd, POLLIN, 0};
 	int t = 50000;
@@ -363,7 +362,6 @@ vector<vcodes> getPressedKeyboardState(string path) {
     t = read(fd, s, sizeof(char) * 4096);
 	char ch[3] = {'\0', '\0', '\0'};
 	sprintf(ch, "%02X", s[20]);
-	printf("%02X", s[20]);
 	x = stoi(ch, nullptr, 16);
     if (x == 0xE0) {
         sprintf(ch, "%02X", s[21]);
@@ -373,15 +371,9 @@ vector<vcodes> getPressedKeyboardState(string path) {
     }
     vcodes v;
     try {
-        last = false;
 	    v = convert<set1, vcodes>(set1(x));
     } catch (invalid_argument const & ex) {
-        try {
-            last = true;
-            v = convert<set1, vcodes>(set1(x - 0x80));
-        } catch (invalid_argument const & e) {
-            return pressed;
-        }
+        return pressed;
     }
 	if (v == vcodes::CAPITAL) {
 		if (!ar[0]) {
@@ -394,11 +386,7 @@ vector<vcodes> getPressedKeyboardState(string path) {
 			pressed.push_back(v);
 		}
 	} else {
-		bool l = ar[(int)v];
-		ar[(int)v] = (last) ? false : true;
-		if (!l && ar[(int)v]) {
-			pressed.push_back(v);
-		}
+		pressed.push_back(v);
 	}
 	cout << endl;
     #endif
