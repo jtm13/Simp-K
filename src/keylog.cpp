@@ -344,7 +344,7 @@ vector<vcodes> getPressedKeyboardState(string path) {
         }
         x++;
     }
-    //#elif __unix__
+    #elif __unix__
     static int fd  = open(&*path.begin(), O_RDONLY | O_NONBLOCK);
     if (fd < 0) {
         cerr << "path is incorrect.\n" << endl;
