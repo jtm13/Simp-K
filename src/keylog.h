@@ -64,7 +64,6 @@ std::vector<vcodes> getPressedKeyboardState(std::string path = "/dev/input/event
 std::string getAscii(std::vector<vcodes>);
 
 // Generic
-
 void writeToFile(std::string, std::string);
 
 #endif

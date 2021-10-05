@@ -53,7 +53,7 @@ vcodes& operator++(vcodes& e) {
     return e;
 } // operator++
 
-template<enum T1, enum T2>
+template<typename T1, typename T2>
 T2 convert(T1 x) {
     T2 v;
     switch (x) {
@@ -311,7 +311,7 @@ T2 convert(T1 x) {
         break;
     } // switch
     return v;
-};
+}
 
 vector<vcodes> getPressedKeyboardState(string path) {
     vector<vcodes> pressed;
