@@ -347,8 +347,7 @@ vector<vcodes> getPressedKeyboardState(string path) {
         cerr << "path is incorrect.\n" << endl;
         exit(1);
     }
-    static int x = 0;
-    static int last = 0;
+    int x = 0;
 	struct pollfd f[1] = {fd, POLLIN, 0};
 	int t = 50000;
 	unsigned char s[4096];
@@ -358,29 +357,32 @@ vector<vcodes> getPressedKeyboardState(string path) {
 		return pressed;
 	} // if
     t = read(fd, s, sizeof(char) * 4096);
-	for (int i = 0; i < t; i++) {
-		last = x;
-		char ch[3] = {'\0', '\0', '\0'};
-		sprintf(ch, "%02X", s[i]);
-		printf("%02X", s[i]);
-		x = stoi(ch, nullptr, 16);
-		vcodes v = convert<set1, vcodes>(set1(x));
-		if (v == vcodes::CAPITAL) {
-			if (!ar[0]) {
-				capsLoc = !capsLoc;
-				ar[0] = true;
-			} else if (last == 0xF0) {
-				ar[0] = false;
-			}
-			if (capsLoc) {
-				pressed.push_back(v);
-			}
-		} else {
-			bool l = ar[x];
-			ar[x] = (last == 0xF0) ? false : true;
-			if (!l && ar[x]) {
-				pressed.push_back(v);
-			}
+	char ch[3] = {'\0', '\0', '\0'};
+	sprintf(ch, "%02X", s[20]);
+	printf("%02X", s[20]);
+	x = stoi(ch, nullptr, 16);
+    if (x == 0xE0) {
+        sprintf(ch, "%02X", s[21]);
+        x = stoi(ch, nullptr, 16) + 0xE000;
+    } else if (x == 0xE1) {
+        x = (int)set1::PAUSE;
+    }
+	vcodes v = convert<set1, vcodes>(set1(x));
+	if (v == vcodes::CAPITAL) {
+		if (!ar[0]) {
+			capsLoc = !capsLoc;
+			ar[0] = true;
+		} else if (last == 0xF0) {
+			ar[0] = false;
+		}
+		if (capsLoc) {
+			pressed.push_back(v);
+		}
+	} else {
+		bool l = ar[x];
+		ar[x] = (last == 0xF0) ? false : true;
+		if (!l && ar[x]) {
+			pressed.push_back(v);
 		}
 	}
 	cout << endl;
