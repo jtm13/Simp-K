@@ -354,7 +354,7 @@ vector<vcodes> getPressedKeyboardState(string path) {
 	struct pollfd f[1] = {fd, POLLIN, 0};
 	int t = 1000;
 	unsigned char s[4096];
-    while (1) {
+    for (int i = 0; i < 5; i++) {
 	    memset(s, '\0', 4096);
 	    if (poll(f, 1, t) < 0) {
 	    	return pressed;
