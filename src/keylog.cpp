@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include "keylog.h"
 #if defined(_WIN32) || defined(__CYGWIN__) || defined(__CYGWIN32)
 #include <windows.h>
@@ -309,6 +310,8 @@ T2 convert(T1 x) {
         case T1::OEM_8:
         v = T2::OEM_8;
         break;
+        default:
+        throw invalid_argument("Not a known member.");
     } // switch
     return v;
 }
@@ -341,12 +344,13 @@ vector<vcodes> getPressedKeyboardState(string path) {
         }
         x++;
     }
-    #elif __unix__
+    //#elif __unix__
     static int fd  = open(&*path.begin(), O_RDONLY | O_NONBLOCK);
     if (fd < 0) {
         cerr << "path is incorrect.\n" << endl;
         exit(1);
     }
+    bool last;
     int x = 0;
 	struct pollfd f[1] = {fd, POLLIN, 0};
 	int t = 50000;
@@ -367,21 +371,32 @@ vector<vcodes> getPressedKeyboardState(string path) {
     } else if (x == 0xE1) {
         x = (int)set1::PAUSE;
     }
-	vcodes v = convert<set1, vcodes>(set1(x));
+    vcodes v;
+    try {
+        last = false;
+	    v = convert<set1, vcodes>(set1(x));
+    } catch (invalid_argument const & ex) {
+        try {
+            last = true;
+            v = convert<set1, vcodes>(set1(x - 0x80));
+        } catch (invalid_argument const & e) {
+            return pressed;
+        }
+    }
 	if (v == vcodes::CAPITAL) {
 		if (!ar[0]) {
 			capsLoc = !capsLoc;
 			ar[0] = true;
-		} else if (last == 0xF0) {
+		} else if (last) {
 			ar[0] = false;
 		}
 		if (capsLoc) {
 			pressed.push_back(v);
 		}
 	} else {
-		bool l = ar[x];
-		ar[x] = (last == 0xF0) ? false : true;
-		if (!l && ar[x]) {
+		bool l = ar[(int)v];
+		ar[(int)v] = (last) ? false : true;
+		if (!l && ar[(int)v]) {
 			pressed.push_back(v);
 		}
 	}
