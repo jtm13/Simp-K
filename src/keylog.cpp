@@ -18,34 +18,34 @@ using namespace std;
 
 vcodes& operator++(vcodes& e) {
     switch(e) {
-        case vcodes::VC_TAB:
+        case vcodes::TAB:
         e = vcodes(0x0C);
         break;
-        case vcodes::VC_RETURN:
+        case vcodes::RETURN:
         e = vcodes(0x10);
         break;
-        case vcodes::VC_CAPITAL:
+        case vcodes::CAPITAL:
         e = vcodes(0x1B);
         break;
-        case vcodes::VC_ESCAPE:
+        case vcodes::ESCAPE:
         e = vcodes(0x20);
         break;
-        case vcodes::VC_9:
+        case vcodes::NUM_9:
         e = vcodes(0x41);
         break;
-        case vcodes::VC_APPS:
+        case vcodes::APPS:
         e = vcodes(0x5F);
         break;
-        case vcodes::VC_DIVIDE:
+        case vcodes::DIVIDE:
         e = vcodes(0xBB);
         break;
-        case vcodes::VC_OEM_3:
+        case vcodes::OEM_3:
         e = vcodes(0xDB);
         break;
-        case vcodes::VC_OEM_8:
+        case vcodes::OEM_8:
         e = vcodes(0xFE);
         break;
-        case END:
+        case vcodes::END:
         throw std::out_of_range("vcodes operator++");
         default:
         e = vcodes(static_cast<std::underlying_type<vcodes>::type>(e) + 1);
@@ -53,264 +53,265 @@ vcodes& operator++(vcodes& e) {
     return e;
 } // operator++
 
-vcodes convert(int x) {
-    vcodes v;
+template<enum class T1, enum class T2>
+T2 convert(T1 x) {
+    T2 v;
     switch (x) {
-        case set3::SET3_BACK:
-        v = vcodes::VC_BACK;
+        case T1::BACK:
+        v = T2::BACK;
         break;
-        case set3::SET3_TAB:
-        v = vcodes::VC_TAB;
+        case T1::TAB:
+        v = T2::TAB;
         break;
-        case set3::SET3_RETURN:
-        v = vcodes::VC_RETURN;
+        case T1::RETURN:
+        v = T2::RETURN;
         break;
-        case set3::SET3_LSHIFT:
-        case set3::SET3_RSHIFT:
-        v = vcodes::VC_SHIFT;
+        case T1::LSHIFT:
+        case T1::RSHIFT:
+        v = T2::SHIFT;
         break;
-        case set3::SET3_LCONTROL:
-        case set3::SET3_RCONTROL:
-        v = vcodes::VC_CONTROL;
+        case T1::LCONTROL:
+        case T1::RCONTROL:
+        v = T2::CONTROL;
         break;
-        case set3::SET3_LALT:
-        case set3::SET3_RALT:
-        v = vcodes::VC_MENU;
+        case T1::LALT:
+        case T1::RALT:
+        v = T2::MENU;
         break;
-        case set3::SET3_PAUSE:
-        v = vcodes::VC_PAUSE;
+        case T1::PAUSE:
+        v = T2::PAUSE;
         break;
-        case set3::SET3_CAPITAL:
-        v = vcodes::VC_CAPITAL;
+        case T1::CAPITAL:
+        v = T2::CAPITAL;
         break;
-        case set3::SET3_ESCAPE:
-        v = vcodes::VC_ESCAPE;
+        case T1::ESCAPE:
+        v = T2::ESCAPE;
         break;
-        case set3::SET3_SPACE:
-        v = vcodes::VC_SPACE;
+        case T1::SPACE:
+        v = T2::SPACE;
         break;
-        case set3::SET3_END:
-        v = vcodes::VC_END;
+        case T1::END:
+        v = T2::END;
         break;
-        case set3::SET3_HOME:
-        v = vcodes::VC_HOME;
+        case T1::HOME:
+        v = T2::HOME;
         break;
-        case set3::SET3_LEFT:
-        v = vcodes::VC_LEFT;
+        case T1::LEFT:
+        v = T2::LEFT;
         break;
-        case set3::SET3_UP:
-        v = vcodes::VC_UP;
+        case T1::UP:
+        v = T2::UP;
         break;
-        case set3::SET3_RIGHT:
-        v = vcodes::VC_RIGHT;
+        case T1::RIGHT:
+        v = T2::RIGHT;
         break;
-        case set3::SET3_DOWN:
-        v = vcodes::VC_DOWN;
+        case T1::DOWN:
+        v = T2::DOWN;
         break;
-        case set3::SET3_PRINT:
-        v = vcodes::VC_PRINT;
+        case T1::PRINT:
+        v = T2::PRINT;
         break;
-        case set3::SET3_INSERT:
-        v = vcodes::VC_INSERT;
+        case T1::INSERT:
+        v = T2::INSERT;
         break;
-        case set3::SET3_DELETE:
-        v = vcodes::VC_DELETE;
+        case T1::DELETE_KEY:
+        v = T2::DELETE_KEY;
         break;
-        case set3::SET3_0:
-        v = vcodes::VC_0;
+        case T1::NUM_0:
+        v = T2::NUM_0;
         break;
-        case set3::SET3_1:
-        v = vcodes::VC_1;
+        case T1::NUM_1:
+        v = T2::NUM_1;
         break;
-        case set3::SET3_2:
-        v = vcodes::VC_2;
+        case T1::NUM_2:
+        v = T2::NUM_2;
         break;
-        case set3::SET3_3:
-        v = vcodes::VC_3;
+        case T1::NUM_3:
+        v = T2::NUM_3;
         break;
-        case set3::SET3_4:
-        v = vcodes::VC_4;
+        case T1::NUM_4:
+        v = T2::NUM_4;
         break;
-        case set3::SET3_5:
-        v = vcodes::VC_5;
+        case T1::NUM_5:
+        v = T2::NUM_5;
         break;
-        case set3::SET3_6:
-        v = vcodes::VC_6;
+        case T1::NUM_6:
+        v = T2::NUM_6;
         break;
-        case set3::SET3_7:
-        v = vcodes::VC_7;
+        case T1::NUM_7:
+        v = T2::NUM_7;
         break;
-        case set3::SET3_8:
-        v = vcodes::VC_8;
+        case T1::NUM_8:
+        v = T2::NUM_8;
         break;
-        case set3::SET3_9:
-        v = vcodes::VC_9;
+        case T1::NUM_9:
+        v = T2::NUM_9;
         break;
-        case set3::SET3_A:
-        v = vcodes::VC_A;
+        case T1::A:
+        v = T2::A;
         break;
-        case set3::SET3_B:
-        v = vcodes::VC_B;
+        case T1::B:
+        v = T2::B;
         break;
-        case set3::SET3_C:
-        v = vcodes::VC_C;
+        case T1::C:
+        v = T2::C;
         break;
-        case set3::SET3_D:
-        v = vcodes::VC_D;
+        case T1::D:
+        v = T2::D;
         break;
-        case set3::SET3_E:
-        v = vcodes::VC_E;
+        case T1::E:
+        v = T2::E;
         break;
-        case set3::SET3_F:
-        v = vcodes::VC_F;
+        case T1::F:
+        v = T2::F;
         break;
-        case set3::SET3_G:
-        v = vcodes::VC_G;
+        case T1::G:
+        v = T2::G;
         break;
-        case set3::SET3_H:
-        v = vcodes::VC_H;
+        case T1::H:
+        v = T2::H;
         break;
-        case set3::SET3_I:
-        v = vcodes::VC_I;
+        case T1::I:
+        v = T2::I;
         break;
-        case set3::SET3_J:
-        v = vcodes::VC_J;
+        case T1::J:
+        v = T2::J;
         break;
-        case set3::SET3_K:
-        v = vcodes::VC_K;
+        case T1::K:
+        v = T2::K;
         break;
-        case set3::SET3_L:
-        v = vcodes::VC_L;
+        case T1::L:
+        v = T2::L;
         break;
-        case set3::SET3_M:
-        v = vcodes::VC_M;
+        case T1::M:
+        v = T2::M;
         break;
-        case set3::SET3_N:
-        v = vcodes::VC_N;
+        case T1::N:
+        v = T2::N;
         break;
-        case set3::SET3_O:
-        v = vcodes::VC_O;
+        case T1::O:
+        v = T2::O;
         break;
-        case set3::SET3_P:
-        v = vcodes::VC_P;
+        case T1::P:
+        v = T2::P;
         break;
-        case set3::SET3_Q:
-        v = vcodes::VC_Q;
+        case T1::Q:
+        v = T2::Q;
         break;
-        case set3::SET3_R:
-        v = vcodes::VC_R;
+        case T1::R:
+        v = T2::R;
         break;
-        case set3::SET3_S:
-        v = vcodes::VC_S;
+        case T1::S:
+        v = T2::S;
         break;
-        case set3::SET3_T:
-        v = vcodes::VC_T;
+        case T1::T:
+        v = T2::T;
         break;
-        case set3::SET3_U:
-        v = vcodes::VC_U;
+        case T1::U:
+        v = T2::U;
         break;
-        case set3::SET3_V:
-        v = vcodes::VC_V;
+        case T1::V:
+        v = T2::V;
         break;
-        case set3::SET3_W:
-        v = vcodes::VC_W;
+        case T1::W:
+        v = T2::W;
         break;
-        case set3::SET3_X:
-        v = vcodes::VC_X;
+        case T1::X:
+        v = T2::X;
         break;
-        case set3::SET3_Y:
-        v = vcodes::VC_Y;
+        case T1::Y:
+        v = T2::Y;
         break;
-        case set3::SET3_Z:
-        v = vcodes::VC_Z;
+        case T1::Z:
+        v = T2::Z;
         break;
-        case set3::SET3_NUMPAD0:
-        v = vcodes::VC_NUMPAD0;
+        case T1::NUMPAD0:
+        v = T2::NUMPAD0;
         break;
-        case set3::SET3_NUMPAD1:
-        v = vcodes::VC_NUMPAD1;
+        case T1::NUMPAD1:
+        v = T2::NUMPAD1;
         break;
-        case set3::SET3_NUMPAD2:
-        v = vcodes::VC_NUMPAD2;
+        case T1::NUMPAD2:
+        v = T2::NUMPAD2;
         break;
-        case set3::SET3_NUMPAD3:
-        v = vcodes::VC_NUMPAD3;
+        case T1::NUMPAD3:
+        v = T2::NUMPAD3;
         break;
-        case set3::SET3_NUMPAD4:
-        v = vcodes::VC_NUMPAD4;
+        case T1::NUMPAD4:
+        v = T2::NUMPAD4;
         break;
-        case set3::SET3_NUMPAD5:
-        v = vcodes::VC_NUMPAD5;
+        case T1::NUMPAD5:
+        v = T2::NUMPAD5;
         break;
-        case set3::SET3_NUMPAD6:
-        v = vcodes::VC_NUMPAD6;
+        case T1::NUMPAD6:
+        v = T2::NUMPAD6;
         break;
-        case set3::SET3_NUMPAD7:
-        v = vcodes::VC_NUMPAD7;
+        case T1::NUMPAD7:
+        v = T2::NUMPAD7;
         break;
-        case set3::SET3_NUMPAD8:
-        v = vcodes::VC_NUMPAD8;
+        case T1::NUMPAD8:
+        v = T2::NUMPAD8;
         break;
-        case set3::SET3_NUMPAD9:
-        v = vcodes::VC_NUMPAD9;
+        case T1::NUMPAD9:
+        v = T2::NUMPAD9;
         break;
-        case set3::SET3_MULTIPLY:
-        v = vcodes::VC_MULTIPLY;
+        case T1::MULTIPLY:
+        v = T2::MULTIPLY;
         break;
-        case set3::SET3_ADD:
-        v = vcodes::VC_ADD;
+        case T1::ADD:
+        v = T2::ADD;
         break;
-        case set3::SET3_SEPARATOR:
-        v = vcodes::VC_SEPARATOR;
+        case T1::SEPARATOR:
+        v = T2::SEPARATOR;
         break;
-        case set3::SET3_SUBTRACT:
-        v = vcodes::VC_SUBTRACT;
+        case T1::SUBTRACT:
+        v = T2::SUBTRACT;
         break;
-        case set3::SET3_DECIMAL:
-        v = vcodes::VC_DECIMAL;
+        case T1::DECIMAL:
+        v = T2::DECIMAL;
         break;
-        case set3::SET3_DIVIDE:
-        v = vcodes::VC_DIVIDE;
+        case T1::DIVIDE:
+        v = T2::DIVIDE;
         break;
-        case set3::SET3_OEM_1:
-        v = vcodes::VC_OEM_1;
+        case T1::OEM_1:
+        v = T2::OEM_1;
         break;
-        case set3::SET3_OEM_PLUS:
-        v = vcodes::VC_OEM_PLUS;
+        case T1::OEM_PLUS:
+        v = T2::OEM_PLUS;
         break;
-        case set3::SET3_OEM_COMMA:
-        v = vcodes::VC_OEM_COMMA;
+        case T1::OEM_COMMA:
+        v = T2::OEM_COMMA;
         break;
-        case set3::SET3_OEM_MINUS:
-        v = vcodes::VC_OEM_MINUS;
+        case T1::OEM_MINUS:
+        v = T2::OEM_MINUS;
         break;
-        case set3::SET3_OEM_PERIOD:
-        v = vcodes::VC_OEM_PERIOD;
+        case T1::OEM_PERIOD:
+        v = T2::OEM_PERIOD;
         break;
-        case set3::SET3_OEM_2:
-        v = vcodes::VC_OEM_2;
+        case T1::OEM_2:
+        v = T2::OEM_2;
         break;
-        case set3::SET3_OEM_3:
-        v = vcodes::VC_OEM_3;
+        case T1::OEM_3:
+        v = T2::OEM_3;
         break;
-        case set3::SET3_OEM_4:
-        v = vcodes::VC_OEM_4;
+        case T1::OEM_4:
+        v = T2::OEM_4;
         break;
-        case set3::SET3_OEM_5:
-        v = vcodes::VC_OEM_5;
+        case T1::OEM_5:
+        v = T2::OEM_5;
         break;
-        case set3::SET3_OEM_6:
-        v = vcodes::VC_OEM_6;
+        case T1::OEM_6:
+        v = T2::OEM_6;
         break;
-        case set3::SET3_OEM_7:
-        v = vcodes::VC_OEM_7;
+        case T1::OEM_7:
+        v = T2::OEM_7;
         break;
-        case set3::SET3_OEM_8:
-        v = vcodes::VC_OEM_8;
+        case T1::OEM_8:
+        v = T2::OEM_8;
         break;
     } // switch
     return v;
-}
+};
 
 vector<vcodes> getPressedKeyboardState(string path) {
     vector<vcodes> pressed;
@@ -318,9 +319,9 @@ vector<vcodes> getPressedKeyboardState(string path) {
     static bool capsLoc = false;
     #if defined(_WIN32) || defined(__CYGWIN__) || defined(__CYGWIN32)
     int x = 0;
-    for (vcodes v = vcodes::VC_BACK; v != END; ++v) {
-        bool p = (GetAsyncKeyState(v) & 0x8000);
-        if (v == vcodes::VC_CAPITAL) {
+    for (vcodes v = vcodes::BACK; v != vcodes::END; ++v) {
+        bool p = (GetAsyncKeyState((int)v) & 0x8000);
+        if (v == vcodes::CAPITAL) {
             if (p && !ar[x]) {
                 capsLoc = !capsLoc;
                 ar[x] = true;
@@ -332,7 +333,7 @@ vector<vcodes> getPressedKeyboardState(string path) {
             }
             continue;
         }
-        if (p && (!ar[x] || (v >= vcodes::VC_SHIFT && v <= vcodes::VC_MENU))) {
+        if (p && (!ar[x] || (v >= vcodes::SHIFT && v <= vcodes::MENU))) {
             ar[x] = true;
             pressed.push_back(v);
         } else if (!p) {
@@ -363,8 +364,8 @@ vector<vcodes> getPressedKeyboardState(string path) {
 		sprintf(ch, "%02X", s[i]);
 		printf("%02X", s[i]);
 		x = stoi(ch, nullptr, 16);
-		vcodes v = convert(x);
-		if (v == vcodes::VC_CAPITAL) {
+		vcodes v = convert<set1, vcodes>(set1(x));
+		if (v == vcodes::CAPITAL) {
 			if (!ar[0]) {
 				capsLoc = !capsLoc;
 				ar[0] = true;
@@ -397,52 +398,52 @@ static bool contains(vector<vcodes> pr, vcodes v) {
 }
 
 string getAscii(vector<vcodes> pressed) {
-    bool shift = contains(pressed, vcodes::VC_SHIFT);
-    bool capslock = contains(pressed, vcodes::VC_CAPITAL);
-    bool alt = contains(pressed, vcodes::VC_MENU);
+    bool shift = contains(pressed, vcodes::SHIFT);
+    bool capslock = contains(pressed, vcodes::CAPITAL);
+    bool alt = contains(pressed, vcodes::MENU);
     string str;
     for(auto vc = pressed.begin(); vc != pressed.end(); ++vc) {
-        if ((*vc >= vcodes::VC_0 && *vc <= vcodes::VC_9) || (*vc >= vcodes::VC_NUMPAD0 && *vc <= vcodes::VC_NUMPAD9)) {
+        if ((*vc >= vcodes::NUM_0 && *vc <= vcodes::NUM_9) || (*vc >= vcodes::NUMPAD0 && *vc <= vcodes::NUMPAD9)) {
             if (shift) {
                 switch (*vc) {
-                    case vcodes::VC_NUMPAD0:
-                    case vcodes::VC_0:
+                    case vcodes::NUMPAD0:
+                    case vcodes::NUM_0:
                     str += ")";
                     break;
-                    case vcodes::VC_NUMPAD1:
-                    case vcodes::VC_1:
+                    case vcodes::NUMPAD1:
+                    case vcodes::NUM_1:
                     str += "!";
                     break;
-                    case vcodes::VC_NUMPAD2:
-                    case vcodes::VC_2:
+                    case vcodes::NUMPAD2:
+                    case vcodes::NUM_2:
                     str += "@";
                     break;
-                    case vcodes::VC_NUMPAD3:
-                    case vcodes::VC_3:
+                    case vcodes::NUMPAD3:
+                    case vcodes::NUM_3:
                     str += "#";
                     break;
-                    case vcodes::VC_NUMPAD4:
-                    case vcodes::VC_4:
+                    case vcodes::NUMPAD4:
+                    case vcodes::NUM_4:
                     str += "$";
                     break;
-                    case vcodes::VC_NUMPAD5:
-                    case vcodes::VC_5:
+                    case vcodes::NUMPAD5:
+                    case vcodes::NUM_5:
                     str += "%";
                     break;
-                    case vcodes::VC_NUMPAD6:
-                    case vcodes::VC_6:
+                    case vcodes::NUMPAD6:
+                    case vcodes::NUM_6:
                     str += "^";
                     break;
-                    case vcodes::VC_NUMPAD7:
-                    case vcodes::VC_7:
+                    case vcodes::NUMPAD7:
+                    case vcodes::NUM_7:
                     str += "&";
                     break;
-                    case vcodes::VC_NUMPAD8:
-                    case vcodes::VC_8:
+                    case vcodes::NUMPAD8:
+                    case vcodes::NUM_8:
                     str += "*";
                     break;
-                    case vcodes::VC_NUMPAD9:
-                    case vcodes::VC_9:
+                    case vcodes::NUMPAD9:
+                    case vcodes::NUM_9:
                     str += "(";
                     break;
                     default:
@@ -451,78 +452,78 @@ string getAscii(vector<vcodes> pressed) {
             } else {
                 str += (char)*vc;
             }
-        } else if (*vc >= vcodes::VC_A && *vc <= vcodes::VC_Z) {
-            str += ((shift && !capslock) || (!shift && capslock))? (char)*vc : (char)(*vc + 32);
-        } else if (*vc >= vcodes::VC_MULTIPLY) {
+        } else if (*vc >= vcodes::A && *vc <= vcodes::Z) {
+            str += ((shift && !capslock) || (!shift && capslock))? (char)*vc : (char)((int)(*vc) + 32);
+        } else if (*vc >= vcodes::MULTIPLY) {
             switch (*vc) {
-                case vcodes::VC_MULTIPLY:
+                case vcodes::MULTIPLY:
                 str += "*";
                 break;
-                case vcodes::VC_OEM_1:
+                case vcodes::OEM_1:
                 str += (shift)? ":" : ";";
                 break;
-                case vcodes::VC_DIVIDE:
-                case vcodes::VC_OEM_2:
+                case vcodes::DIVIDE:
+                case vcodes::OEM_2:
                 str += (shift)? "?" : "/";
                 break;
-                case vcodes::VC_OEM_3:
+                case vcodes::OEM_3:
                 str += (shift)? "~" : "`";
                 break;
-                case vcodes::VC_OEM_4:
+                case vcodes::OEM_4:
                 str += (shift)? "{" : "[";
                 break;
-                case vcodes::VC_SEPARATOR:
-                case vcodes::VC_OEM_5:
+                case vcodes::SEPARATOR:
+                case vcodes::OEM_5:
                 str += (shift)? "|" : "\\";
                 break;
-                case vcodes::VC_OEM_6:
+                case vcodes::OEM_6:
                 str += (shift)? "}" : "]";
                 break;
-                case vcodes::VC_OEM_7:
+                case vcodes::OEM_7:
                 str += (shift)? "\"" : "\'";
                 break;
-                case vcodes::VC_OEM_8:
+                case vcodes::OEM_8:
                 str += (shift)? "" : "";
                 break;
-                case vcodes::VC_OEM_COMMA:
+                case vcodes::OEM_COMMA:
                 str += (shift)? "<" : ",";
                 break;
-                case vcodes::VC_OEM_CLEAR:
+                case vcodes::OEM_CLEAR:
                 str += (shift)? "" : "";
                 break;
-                case vcodes::VC_DECIMAL:
-                case vcodes::VC_OEM_PERIOD:
+                case vcodes::DECIMAL:
+                case vcodes::OEM_PERIOD:
                 str += (shift)? ">" : ".";
                 break;
-                case vcodes::VC_ADD:
-                case vcodes::VC_OEM_PLUS:
+                case vcodes::ADD:
+                case vcodes::OEM_PLUS:
                 str += (shift)? "+" : "=";
                 break;
-                case vcodes::VC_SUBTRACT:
-                case vcodes::VC_OEM_MINUS:
+                case vcodes::SUBTRACT:
+                case vcodes::OEM_MINUS:
                 str += (shift)? "_" : "-";
                 break;
                 default:
                 str += "";
             }
-        } else if (*vc >= vcodes::VC_BACK && *vc <= vcodes::VC_DELETE) {
+        } else if (*vc >= vcodes::BACK && *vc <= vcodes::DELETE_KEY) {
             switch (*vc) {
-                case vcodes::VC_BACK:
+                case vcodes::BACK:
                 str += "\b";
                 break;
-                case vcodes::VC_TAB:
+                case vcodes::TAB:
                 str += "\t";
                 break;
-                case vcodes::VC_RETURN:
+                case vcodes::RETURN:
                 str += "\n";
                 break;
-                case vcodes::VC_ESCAPE:
+                case vcodes::ESCAPE:
                 str += "" + (char)27;
                 break;
-                case vcodes::VC_SPACE:
+                case vcodes::SPACE:
                 str += " ";
                 break;
-                case vcodes::VC_DELETE:
+                case vcodes::DELETE_KEY:
                 str += "" + (char)127;
                 break;
                 default:
