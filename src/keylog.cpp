@@ -363,6 +363,8 @@ vector<vcodes> getPressedKeyboardState(string path) {
         exit(1);
     }
     int x = 0;
+    static bool shift = false;
+    static bool alt = false;
 	struct pollfd f[1] = {fd, POLLIN, 0};
 	int t = 50000;
 	struct input_event s;
@@ -379,10 +381,17 @@ vector<vcodes> getPressedKeyboardState(string path) {
             return pressed;
     }
 	if (v == vcodes::CAPITAL) {
-			capsLoc = !capsLoc;
-			ar[0] = true;
-	} else {
+			if (s.value == 1) {
+                capsLoc = !capsLoc;
+            }
+	} else if (v == vcodes::SHIFT) {
+        shift = s.value == 1 || s.value == 2;
+    } else if(v == vcodes::MENU) {
+        alt = s.value == 1 || s.value == 2;
+    } else {
+        if (s.value == 1 || s.value == 2) {
 			pressed.push_back(v);
+        }
 	}
 		if (capsLoc) {
 			pressed.push_back(v);
