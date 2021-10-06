@@ -393,9 +393,15 @@ vector<vcodes> getPressedKeyboardState(string path) {
 			pressed.push_back(v);
         }
 	}
-		if (capsLoc) {
-			pressed.push_back(v);
-		}
+	if (capsLoc) {
+		pressed.push_back(vcodes::CAPITAL);
+	}
+    if (shift) {
+        pressed.push_back(vcodes::SHIFT);
+    }
+    if (alt) {
+        pressed.push_back(vcodes::MENU);
+    }
     #endif
     return pressed;
 } // getAsyncKeyboardState
