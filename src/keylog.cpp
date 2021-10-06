@@ -17,6 +17,18 @@
 
 using namespace std;
 
+struct time {
+    long seconds;
+    long mill_sec;
+};
+
+struct input_event {
+    struct time t;
+    short type;
+    short code;
+    int value;
+};
+
 vcodes& operator++(vcodes& e) {
     switch(e) {
         case vcodes::TAB:
@@ -350,57 +362,31 @@ vector<vcodes> getPressedKeyboardState(string path) {
         cerr << "path is incorrect.\n" << endl;
         exit(1);
     }
-    bool last;
     int x = 0;
 	struct pollfd f[1] = {fd, POLLIN, 0};
 	int t = 50000;
-	unsigned char s[4096];
-	memset(s, '\0', 4096);
-	if (poll(f, 1, t) < 0) {
+	struct input_event s;
+	if (poll(f, 1, t) <= 0) {
 		cout << "ME" << endl;
 		return pressed;
 	} // if
-    t = read(fd, s, sizeof(char) * 4096);
-	char ch[3] = {'\0', '\0', '\0'};
-	sprintf(ch, "%02X", s[20]);
-	printf("%02X", s[20]);
-	x = stoi(ch, nullptr, 16);
-    if (x == 0xE0) {
-        sprintf(ch, "%02X", s[21]);
-        x = stoi(ch, nullptr, 16) + 0xE000;
-    } else if (x == 0xE1) {
-        x = (int)set1::PAUSE;
-    }
+    t = read(fd, &s, sizeof(s));
+	x = s.code;
     vcodes v;
     try {
-        last = false;
 	    v = convert<set1, vcodes>(set1(x));
     } catch (invalid_argument const & ex) {
-        try {
-            last = true;
-            v = convert<set1, vcodes>(set1(x - 0x80));
-        } catch (invalid_argument const & e) {
             return pressed;
-        }
     }
 	if (v == vcodes::CAPITAL) {
-		if (!ar[0]) {
 			capsLoc = !capsLoc;
 			ar[0] = true;
-		} else if (last) {
-			ar[0] = false;
-		}
+	} else {
+			pressed.push_back(v);
+	}
 		if (capsLoc) {
 			pressed.push_back(v);
 		}
-	} else {
-		bool l = ar[(int)v];
-		ar[(int)v] = (last) ? false : true;
-		if (!l && ar[(int)v]) {
-			pressed.push_back(v);
-		}
-	}
-	cout << endl;
     #endif
     return pressed;
 } // getAsyncKeyboardState
